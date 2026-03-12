@@ -4,19 +4,41 @@ Library for finding potential genes in a strand of DNA.
 
 import helpers
 
+COMPLIMENT_DICT = {
+    'A' : 'T',
+    'T' : 'A',
+    'C' : 'G',
+    'G' : 'A'
+}
 
 def get_complement(nucleotide):
     """
-    Your docstring goes here.
+    Returns the complimentary nucleotide for a given nucleotide 'A', 'T', 'C', or 'G'
+
+    Args:
+        nucleotide: a single character string representing one of the four nucleotides
+
+    Returns:
+        the compliment of nucleotide
     """
-    pass
+    return COMPLIMENT_DICT[nucleotide]
 
 
 def get_reverse_complement(strand):
     """
-    Your docstring goes here.
+    Returns the reversed compliment of a given strand of nucleotides
+
+    Args:
+        strand: a string representing a strand of DNA
+
+    Returns:
+        the reversed compliment of the given strand of DNA
     """
-    pass
+    reverse_compliment = ''
+    for nucleotide in strand:
+        reverse_compliment = reverse_compliment + get_complement(nucleotide)
+    return reverse_compliment[::-1]
+    
 
 
 def rest_of_orf(strand):
