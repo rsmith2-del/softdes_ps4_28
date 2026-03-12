@@ -5,13 +5,14 @@ evaluated.
 
 Let us know the names of each partner below.
 
-Partner 1: 
+Partner 1: Liam Smith
 
-Partner 2:
+Partner 2: Wren Yockey
 
 In the space below, write a paragraph with take aways you got from 
 talking about working styles with your partner.
 
+Prefer to work independantly, but checking in frequently when stuck. Planning to split up work evenly, alternating between writing and testing functions. Both work best at night. 
 
 
 

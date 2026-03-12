@@ -23,7 +23,27 @@ def rest_of_orf(strand):
     """
     Your docstring goes here.
     """
-    pass
+    from textwrap import wrap
+   #breaks strand into a list of 3 character long strings
+    i=0
+    final_strand = ""
+    if len(strand)%3 == 0:
+        chunk_strand = (wrap(strand, width=3))
+    else:
+        return 'Incorrect strand length'
+
+    if strand[0] == 'ATG':
+        while i < len(chunk_strand):
+            if chunk_strand[i] == 'TAA':
+                return final_strand
+            if chunk_strand[i] == 'TAG':
+                return final_strand
+            if chunk_strand[i] == 'TGA':
+                return final_strand
+            else:
+                final_strand = final_strand + (chunk_strand[i])
+            i+=1
+
 
 
 def find_all_orfs_one_frame(strand):
