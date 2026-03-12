@@ -3,9 +3,45 @@ Library for finding potential genes in a strand of DNA.
 """
 
 import helpers
+from textwrap import wrap
 
-COMPLIMENT_DICT = {"A": "T", "T": "A", "C": "G", "G": "A"}
+COMPLIMENT_DICT = {"A": "T",
+                "T": "A",
+                "C": "G",
+                "G": "A"}
 
+
+STOP_CODONS = [
+    'TAG',
+    'TGA',
+    'TAA'
+]
+
+def get_next_stop_codon(strand):
+    """
+    """
+    if len(strand)%3 == 0:
+        chunk_strand = (wrap(strand, width=3))
+    for value in STOP_CODONS:
+        if chunk_strand.index(value) != -1:
+            return chunk_strand.index(value)
+    return -1
+
+STOP_CODONS = [
+    'TAG',
+    'TGA',
+    'TAA'
+]
+
+def get_next_stop_codon(strand):
+    """
+    """
+    if len(strand)%3 == 0:
+        chunk_strand = (wrap(strand, width=3))
+    for value in STOP_CODONS:
+        if chunk_strand.index(value) != -1:
+            return chunk_strand.index(value)
+    return -1
 
 def get_complement(nucleotide):
     """
@@ -35,8 +71,7 @@ def get_reverse_complement(strand):
         reverse_compliment = reverse_compliment + get_complement(nucleotide)
     return reverse_compliment[::-1]
 
-
-def rest_of_orf(strand):
+def rest_of_orf(strand, include_start=False):
     """
     Returns an orf, a strand of nucleotides from a start codon to an end codon.
 
@@ -48,10 +83,8 @@ def rest_of_orf(strand):
 
 
     """
-    from textwrap import wrap
-
-    # breaks strand into a list of 3 character long strings
-    i = 0
+   #breaks strand into a list of 3 character long strings
+    i=0
     final_strand = ""
     if len(strand) % 3 == 0:
         chunk_strand = wrap(strand, width=3)
@@ -68,9 +101,10 @@ def rest_of_orf(strand):
                 return final_strand
             if chunk_strand[i] == "TGA":
                 return final_strand
-            else:
-                final_strand = final_strand + (chunk_strand[i])
-            i += 1
+            if include_start and chunk_strand[i] == 'ATG':
+                return final_strand
+            final_strand = final_strand + (chunk_strand[i])
+            i+=1
         return ""
     return ""
 
@@ -79,7 +113,13 @@ def find_all_orfs_one_frame(strand):
     """
     Your docstring goes here.
     """
-    pass
+    orf_list = []
+    while get_next_stop_codon(strand) != -1:
+        strand = strand[get_next_stop_codon(strand)+3:]
+        entire_orf = rest_of_orf(strand, include_start=True)
+        orf_list.append(entire_orf)
+
+        
 
 
 def find_all_orfs(strand):
