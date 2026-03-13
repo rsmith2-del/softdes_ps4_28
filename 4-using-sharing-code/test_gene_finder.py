@@ -38,6 +38,12 @@ find_all_orfs_cases = [
     # This case from find_all_orfs has no ORFs in other frames, so it should
     # return the same result as in the one_frame case.
     ("ATGTAAATGAAATAA", ["ATG", "ATGAAA"]),
+    # This case has a valid orf for a one nucleotide shift
+    ('ATGAATGTGAAATAG', ['ATGAATGTGAAA', 'ATG']),
+    # This case has a valid orf for a two nucleotide shift
+    ('ATGAAATGTGAATAG', ['ATGAAATGTGAA', 'ATG']),
+    # This case has both a valid orf for a one nucleotide shift AND for a two nucleotide shift
+    ('ATGAATGTGAAATGTGAATGA', ['ATGAATGTGAAATGTGAA', 'ATG', 'ATG']),
 ]
 
 find_all_orfs_both_strands_cases = [
