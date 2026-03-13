@@ -4,6 +4,7 @@ Library for finding potential genes in a strand of DNA.
 
 import helpers
 from helpers import amino_acid
+from helpers import load_fasta_file
 import random
 from textwrap import wrap
 
@@ -53,25 +54,26 @@ def rest_of_orf(strand, include_start_codon=False):
     """
     # breaks strand into a list of 3 character long strings
     i = 0
+    j = 0
     final_strand = ""
-    if len(strand) % 3 == 0:
-        chunk_strand = wrap(strand, width=3)
-    else:
-        return ""
 
-    if chunk_strand[0] == "ATG":
-        while i < len(chunk_strand):
-            if chunk_strand[i] == "TAA":
-                return final_strand
-            if chunk_strand[i] == "TAG":
-                return final_strand
-            if chunk_strand[i] == "TGA":
-                return final_strand
-            if include_start_codon and chunk_strand[i] == "ATG" and i > 0:
-                return final_strand
-            final_strand = final_strand + (chunk_strand[i])
-            i += 1
-        return ""
+    chunk_strand = wrap(strand, width=3)
+    while j < len(chunk_strand):
+        if chunk_strand[j] == "ATG":
+            new_chunk = chunk_strand[j:]
+            while i < len(new_chunk):
+                if new_chunk[i] == "TAA":
+                    return final_strand
+                if new_chunk[i] == "TAG":
+                    return final_strand
+                if new_chunk[i] == "TGA":
+                    return final_strand
+                if include_start_codon and new_chunk[i] == "ATG" and i > 0:
+                    return final_strand
+                final_strand = final_strand + (new_chunk[i])
+                i += 1
+
+        j += 1
     return ""
 
 
@@ -82,7 +84,12 @@ def find_all_orfs_one_frame(strand):
     orf_list = []
     while len(strand) > 0:
         next_orf_in_frame = rest_of_orf(strand, include_start_codon=True)
-        next_index = len(rest_of_orf(strand, include_start_codon=False)) + 3
+        next_start_point = rest_of_orf(strand, include_start_codon=False)
+        next_index = len(next_start_point) + 3
+        if next_orf_in_frame == "":
+            break
+        if next_start_point == "":
+            break
         orf_list.append(next_orf_in_frame)
         strand = strand[next_index:]
     return orf_list
@@ -108,6 +115,7 @@ def find_all_orfs(strand):
 
             shift_1_orfs_list.extend(find_all_orfs_one_frame(orfs_shift_1[((3 * i)) :]))
             break
+        
         i += 1
     i = 0
     while i < len(chunk_shift_2):
@@ -134,11 +142,9 @@ def find_all_orfs_both_strands(strand):
     """
     strand_1_orfs = find_all_orfs(strand)
     comp_orfs = find_all_orfs(get_reverse_complement(strand))
-
     orfs = []
     orfs.extend(strand_1_orfs)
     orfs.extend(comp_orfs)
-    print(orfs)
     return orfs
 
 
@@ -148,6 +154,7 @@ def find_longest_orf(strand):
     """
     if len(find_all_orfs_both_strands(strand)) > 0:
         return max(find_all_orfs_both_strands(strand), key=len)
+
     return ""
 
 
@@ -184,6 +191,7 @@ def encode_amino_acids(orf):
             break
         amino_acid_list.append(amino_acid(chunk_orf[i]))
         i += 1
+
     return "".join(amino_acid_list)
 
 
@@ -191,6 +199,21 @@ def find_genes(path):
     """
     Your docstring goes here.
     """
+    sequence = load_fasta_file(path)
+    sequence = sequence[:29000]
+    print(len(sequence))
+    #sequence_threshold = noncoding_orf_threshold(sequence, 20)
+    sequence_threshold= 78
+    print(sequence_threshold)
+
+    all_sequence_orfs = find_all_orfs_both_strands(sequence)
+
+    amino_acid_list = []
+    for value in all_sequence_orfs:
+        if len(value) > sequence_threshold:
+            amino_acid_list.append(encode_amino_acids(value))
+    print(amino_acid_list)
+    return amino_acid_list
 
 
 # DON'T ADD ANYTHING ELSE TO THIS FILE. IF YOU DO, YOUR CODE MAY BE MARKED AS
