@@ -11,11 +11,20 @@ import gene_finder
 get_complement_cases = [
     # Check that the complement of A is T.
     ("A", "T"),
+    # Check that the complement of T is A.
+    ("T", "A"),
+    # Check that the complement of C is G.
+    ("C", "G"),
+    # Check that the complement of G is C.
+    ("G", "C")
+
 ]
 
 get_reverse_complement_cases = [
     # Check a single nucleotide, which should be the same as the complement.
     ("A", "T"),
+    # Check that a strand ATG returns CAT
+    ("ATG", "CAT")
 ]
 
 rest_of_orf_cases = [
@@ -25,6 +34,12 @@ rest_of_orf_cases = [
     ("ATGAAA", ""),
     # Check a case without a stop codon where the length is not a multiple of 3.
     ("ATGA", ""),
+    # Check a case with multiple stop codons
+    ("ATGAGGCTATGATGA", "ATGAGGCTA"),
+    # Check a case with only a stop codon
+    ("TGA", ""),
+    # Check a case with a start codon after the first codon
+    ("ACCATGTGA", "ATG")
 ]
 
 find_all_orfs_one_frame_cases = [
@@ -32,6 +47,10 @@ find_all_orfs_one_frame_cases = [
     ("ATGTGA", ["ATG"]),
     # Check a strand with two ORFs.
     ("ATGTAAATGAAATAA", ["ATG", "ATGAAA"]),
+    # Check a strand with a nested ORF
+    ("ATGCAATGGATGCCCTGA", ["ATGCAATGG"]),
+    # Check a strand without a stop codon
+    ("ATGCCCGGGAAA", [])
 ]
 
 find_all_orfs_cases = [
@@ -50,11 +69,20 @@ find_all_orfs_both_strands_cases = [
     # Test a short strand starting with a start codon whose reverse complement
     # is itself. Thus this should return two copies of the same ORF.
     ("ATGTAGCTACAT", ["ATG", "ATG"]),
+    # This case tests if there is no reverse complement that is an ORF
+    ("ATGTAGGATTAA", ["ATG"]),
+    # This case tests is there is only an ORF in the reverse complement
+    ("CTACAT", ["ATG"])
+    #
 ]
 
 find_longest_orf_cases = [
     # An ORF covering the whole strand is by default the longest ORF.
     ("ATGAAAAAAAAATAG", "ATGAAAAAAAAA"),
+    # Test if it is given an empty orf
+    ("", ""),
+    # Test a strand with two orfs
+    ("ATGCCCCCCTGAATGCCCTGA", "ATGCCCCCC")
 ]
 
 encode_amino_acids_cases = [
@@ -62,6 +90,8 @@ encode_amino_acids_cases = [
     ("ATG", "M"),
     # Check a case in which the length is not a multiple of 3.
     ("ATGCCCGCTTT", "MPA"),
+    # Check a case in which there are multiple amino acids
+    ("ATGCCC", "MP")
 ]
 
 
