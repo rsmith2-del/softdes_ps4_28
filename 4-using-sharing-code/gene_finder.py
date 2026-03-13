@@ -191,7 +191,6 @@ def find_genes(path):
     """
     Your docstring goes here.
     """
-    
 
 
 # DON'T ADD ANYTHING ELSE TO THIS FILE. IF YOU DO, YOUR CODE MAY BE MARKED AS
