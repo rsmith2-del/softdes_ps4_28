@@ -6,7 +6,7 @@ execute:
 
 # Gene Finder Analysis
 
-Author: **PARTNER NAMES HERE**
+Author: **Wren Yockey, Liam Smith**
 
 Run the cell below each time the notebook is started or restarted to
 ensure that if you change any code in the library, this notebook will
@@ -17,4 +17,42 @@ use the latest version of the library code.
 %autoreload 2
 ```
 
+
+```{python}
+from gene_finder import find_genes
+from helpers import load_fasta_file
+
+
+
+find_genes('data/NC_045512.2.fa')
+#print(amino_acids)
+```
+
 To analyze the SARS-CoV-2 virus, we...
+
+
+
+By analyzing the proteins derived from our function, we found the following:
+
+MYSFVSEETGTLIVNSVLLFLAFVVFLLVTLAILTALRLCAYCCNIVNVSLVKPSFYVYSRVKNLNSSRVPDLLV = envelope protein [Severe acute respiratory syndrome coronavirus 2]
+
+MKIILFLALITLATCELYHYQECVRGTTVLLKEPCSSGTYEGNSPFHPLADNKFALTCFSTQFAFACPDGVKHVYQLRARSVSPKLFIRQEEVQELYSPIFLIVAAIVFITLCFTLKRKTE = ORF7a protein [Severe acute respiratory syndrome coronavirus 2]
+
+'MESLVPGFNEKTHVQLSLPVLQVRDVLVRGFGDSVEEVLSEARQHLKDGTCGLVEVEKGVLPQLEQPYVFIKRSDARTAPHGHV', =ORF1a polyprotein, partial [Severe acute respiratory syndrome coronavirus 2]
+
+MVLLLYVKCCLTENYIFHGKLVNLDHHLTEI = uncharacterized protein 1k [SARS coronavirus ZJ0301]
+
+MLLLQILFALLQRYRYKPHSLSDGLLLALHFLLFFRALPKS = ORF3c protein
+
+MWAKYQWLTARFFFVRTVIKELVAIVTAPI = cbb3-type cytochrome
+
+MKIFKKTGTLNIAVVLPVNSCVSLTEGHTLA = SusD/RagB family nutrient-binding outer membrane lipoprotein
+
+MIRKSKLVLKKLQQLWKKLSSSQKTCYFILTL = c-type cytochrome
+
+MVLFVQKLTLSWTIIIRKTILISQSNQLILYQTNHIQTQASIILSLYVIISNLL = hypothetical protein [Gossypium laxum]
+
+
+
+
+

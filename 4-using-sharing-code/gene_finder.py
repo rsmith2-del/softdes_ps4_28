@@ -79,7 +79,13 @@ def rest_of_orf(strand, include_start_codon=False):
 
 def find_all_orfs_one_frame(strand):
     """
-    Your docstring goes here.
+    Finds all orfs in a frame.
+
+    Args:
+    Strand- a string of nucleotides that describe a strand of DNA.
+
+    Returns:
+    orf_list- a list of all orfs in the strand.
     """
     orf_list = []
     while len(strand) > 0:
@@ -97,7 +103,13 @@ def find_all_orfs_one_frame(strand):
 
 def find_all_orfs(strand):
     """
-    Your docstring goes here.
+    Finds all orfs in a frame, includes those shifted by one or two nucleotides.
+
+    Args:
+    Strand- a string of nucleotides that describe a strand of DNA.
+
+    Returns:
+    final_all_orfs_list- a list of all orfs for orignal and shifted positions of strand.
     """
     orfs_in_frame = find_all_orfs_one_frame(strand)
     orfs_shift_1 = strand[1:-2]
@@ -115,7 +127,7 @@ def find_all_orfs(strand):
 
             shift_1_orfs_list.extend(find_all_orfs_one_frame(orfs_shift_1[((3 * i)) :]))
             break
-        
+
         i += 1
     i = 0
     while i < len(chunk_shift_2):
@@ -138,7 +150,14 @@ def find_all_orfs(strand):
 
 def find_all_orfs_both_strands(strand):
     """
-    Your docstring goes here.
+    Finds all orfs for strand and its complement.
+
+    Args:
+    Strand- a string of nucleotides that describe a strand of DNA.
+
+    Returns:
+    orfs- A list of orfs for both strand and the complement of strand.
+
     """
     strand_1_orfs = find_all_orfs(strand)
     comp_orfs = find_all_orfs(get_reverse_complement(strand))
@@ -150,17 +169,32 @@ def find_all_orfs_both_strands(strand):
 
 def find_longest_orf(strand):
     """
-    Your docstring goes here.
+    Finds the longest orf in strand and its complement.
+
+    Args:
+    Strand- a string of nucleotides that describe a strand of DNA.
+
+    Returns:
+    longest- the longest orf in strand and its complement.
+
     """
     if len(find_all_orfs_both_strands(strand)) > 0:
-        return max(find_all_orfs_both_strands(strand), key=len)
+        longest = max(find_all_orfs_both_strands(strand), key=len)
+        return longest
 
     return ""
 
 
 def noncoding_orf_threshold(strand, num_trials):
     """
-    Your docstring goes here.
+    Creates a threshold for filtering out shortest orfs from strand through random iteration.
+
+    Args:
+    Strand- a string of nucleotides that describe a strand of DNA.
+    num_trials- the number of random iterations
+
+    Returns:
+    min_length- a bottom threshold for the length of an orf
     """
     i = 0
     min_length = 1000000000000000
@@ -177,7 +211,13 @@ def noncoding_orf_threshold(strand, num_trials):
 
 def encode_amino_acids(orf):
     """
-    Your docstring goes here.
+    Converts an orf into a string representing the sequence of amino acids
+
+    Args:
+    orf- a string, described between a start and stop codon.
+
+    Returns:
+    final_amino_list- a string representing the sequence of amino acids in orf
     """
 
     chunk_orf = wrap(orf, width=3)
@@ -191,19 +231,25 @@ def encode_amino_acids(orf):
             break
         amino_acid_list.append(amino_acid(chunk_orf[i]))
         i += 1
-
-    return "".join(amino_acid_list)
+    final_amino_list = "".join(amino_acid_list)
+    return final_amino_list
 
 
 def find_genes(path):
     """
-    Your docstring goes here.
+    Takes a dataset of nucleotides and returns a list of proteins
+
+    Args:
+    path- the python pathway to the data file holding the nucleotide string.
+
+    Returns:
+    amino_acid_list- the list of proteins described by the nucleotides.
     """
     sequence = load_fasta_file(path)
     sequence = sequence[:29000]
     print(len(sequence))
-    #sequence_threshold = noncoding_orf_threshold(sequence, 20)
-    sequence_threshold= 78
+    # sequence_threshold = noncoding_orf_threshold(sequence, 20)
+    sequence_threshold = 78
     print(sequence_threshold)
 
     all_sequence_orfs = find_all_orfs_both_strands(sequence)
